@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 from pathlib import Path
 from dotenv import load_dotenv
 load_dotenv('password_manager_DRF/.env')
@@ -32,7 +33,8 @@ INSTALLED_APPS = [
     'user_profile',
     'rest_framework',
     'rest_framework_swagger',
-    'rest_framework.authtoken'
+    'rest_framework_simplejwt',
+    # 'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
@@ -45,30 +47,37 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-SWAGGER_SETTINGS = {
-    'SECURITY_DEFINITIONS': {
-        "Auth Token eg [Bearer (JWT) ]": {
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header"
-        }
-    }
-}
+# SWAGGER_SETTINGS = {
+#     'SECURITY_DEFINITIONS': {
+#         "Auth Token eg [Bearer (JWT) ]": {
+#             "type": "apiKey",
+#             "name": "Authorization",
+#             "in": "header"
+#         }
+#     }
+# }
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
         # 'user_profile.backends.JWTAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
     ),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 1
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
 
-import os
-JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_CREDENTIALS = True
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+}
+
+# import os
+# JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
+# CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ALLOW_CREDENTIALS = True
 
 
 ROOT_URLCONF = 'password_manager_DRF.urls'
@@ -154,4 +163,18 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
+# REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
+#{{{{{{{{{{ REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
+# Continuing to use CoreAPI
+# If you're currently using the CoreAPI schemas, you'll need to make sure to update your REST framework settings to include DEFAULT_SCHEMA_CLASS explicitly.
+
+# settings.py:
+
+# REST_FRAMEWORK = {
+#   ...
+#   'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
+# }
+# You'll still be able to keep using CoreAPI schemas, API docs, and client for the foreseeable future. We'll aim to ensure that the CoreAPI schema generator remains available as a 
+# third party package, even once it has eventually been removed from REST framework, scheduled for version 3.12.
+
+# We have removed the old documentation for the CoreAPI based schema generation. You may view the Legacy CoreAPI documentation here.}}}}}}}}}}

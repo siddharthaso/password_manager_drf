@@ -11,43 +11,43 @@ from rest_framework.response import Response
 from user_profile import serializers
 
 # @csrf_exempt
-class ProfileViewSet (viewsets.ModelViewSet):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+# class ProfileViewSet (viewsets.ModelViewSet):
+#     queryset = Profile.objects.all()
+#     serializer_class = ProfileSerializer
+#     # permission_classes = [permissions.IsAuthenticated]
 
-class SiteViewSet (viewsets.ModelViewSet):
-    queryset = Site.objects.all()
-    serializer_class = SiteSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+# class SiteViewSet (viewsets.ModelViewSet):
+#     queryset = Site.objects.all()
+#     serializer_class = SiteSerializer
+#     # permission_classes = [permissions.IsAuthenticated]
 
-class TagsViewSet (viewsets.ModelViewSet):
-    queryset = Tags.objects.all()
-    serializer_class = TagsSerializer
+# class TagsViewSet (viewsets.ModelViewSet):
+#     queryset = Tags.objects.all()
+#     serializer_class = TagsSerializer
 
     # permission_classes = [permissions.IsAuthenticated]
 
 class TagAPIView(ListAPIView):
-    serializer_class = SiteSerializer
-    queryset = Site.objects.all()
-    authentication_classes = [TokenAuthentication]
+    serializer_class = TagsSerializer
+    queryset = Tags.objects.all()
+    # authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self,request):
         return self.list(request)
 
     def get_queryset(self):
-
         queryset = self.queryset.filter(user = self.request.user)
-        if not queryset:
-            return raiseExceptions({"error":"You don't have any data"})
+        # queryset = Site.objects.all().filter(user = self.request.user)
+        # if not queryset:
+        #    return Response({"msg":"NO DATA"},status=status.HTTP_404_NOT_FOUND)
         return queryset
 
 class SiteAPIView(ListAPIView):
     serializer_class = SiteSerializer
     queryset = Site.objects.all()
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated,]
 
     def get(self,request):
         if self.get_queryset():
@@ -57,22 +57,6 @@ class SiteAPIView(ListAPIView):
             return Response({"msg":"NO DATA"},status=status.HTTP_404_NOT_FOUND)
     def get_queryset(self):
         queryset = self.queryset.filter(user = self.request.user)
-        return queryset
-
-class TagAPIView(ListAPIView):
-    serializer_class = SiteSerializer
-    queryset = Site.objects.all()
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    def get(self,request):
-        return self.list(request)
-
-    def get_queryset(self):
-
-        queryset = self.queryset.filter(user = self.request.user)
-        if not queryset:
-            return raiseExceptions({"error":"You don't have any data"})
         return queryset
 
 
