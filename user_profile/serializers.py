@@ -1,3 +1,4 @@
+from wsgiref.validate import validator
 from rest_framework import serializers
 from .models import Profile, Site, Tags
 from django.contrib.auth.models import User
@@ -30,9 +31,14 @@ class SiteSerializer(serializers.ModelSerializer):
         fields = ['site_name', 'site_url', 'is_public', 'user']
 
 class SiteSimpleSerializer(serializers.ModelSerializer):
+
+    def validUrl(value):
+        if not value.find("."):
+            raise serializers.ValidationError('Not a valid URL')
+
     id = serializers.IntegerField(label='ID', read_only=True)
     site_name = serializers.CharField(max_length=300)
-    site_url = serializers.CharField(allow_blank=True, allow_null=True, max_length=300, required=False)
+    site_url = serializers.CharField(allow_blank=True, allow_null=True, max_length=300, required=False, validators =[validUrl])
     is_public = serializers.BooleanField(required=False)
     user = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=User.objects.all(), required=False)
 
@@ -46,6 +52,7 @@ class SiteSimpleSerializer(serializers.ModelSerializer):
         instance.user = validated_data.get('user', instance.user)
         instance.save()
         return instance
+    
 
 #Tags Serializer--------------------------------------------------------
 class TagsSerializer(serializers.ModelSerializer):
