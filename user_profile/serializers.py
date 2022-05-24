@@ -10,8 +10,18 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ['user', 'location'] #, 'profile_picture'
 
 class ProfileSimpleSerializer(serializers.Serializer):
+    id = serializers.IntegerField(label='ID', read_only=True)
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), validators=[UniqueValidator(queryset=Profile.objects.all())]),
     location = serializers.CharField(max_length=140)
+
+    def create(self, validated_data):
+        return Profile.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.user = validated_data.get('user', instance.user)
+        instance.location = validated_data.get('location', instance.location)
+        instance.save()
+        return instance
 
 #Site Serializer--------------------------------------------------------
 class SiteSerializer(serializers.ModelSerializer):
@@ -20,10 +30,22 @@ class SiteSerializer(serializers.ModelSerializer):
         fields = ['site_name', 'site_url', 'is_public', 'user']
 
 class SiteSimpleSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(label='ID', read_only=True)
     site_name = serializers.CharField(max_length=300)
     site_url = serializers.CharField(allow_blank=True, allow_null=True, max_length=300, required=False)
     is_public = serializers.BooleanField(required=False)
     user = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=User.objects.all(), required=False)
+
+    def create(self, validated_data):
+        return Site.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.site_name = validated_data.get('site_name', instance.site_name)
+        instance.site_url = validated_data.get('site_url', instance.site_url)
+        instance.is_public = validated_data.get('is_public', instance.is_public)
+        instance.user = validated_data.get('user', instance.user)
+        instance.save()
+        return instance
 
 #Tags Serializer--------------------------------------------------------
 class TagsSerializer(serializers.ModelSerializer):
@@ -32,8 +54,18 @@ class TagsSerializer(serializers.ModelSerializer):
         fields = ['tags_name', 'user']  
 
 class TagsSimpleSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(label='ID', read_only=True)
     tags_name = serializers.CharField(max_length=300)
     user = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=User.objects.all(), required=False)
+
+    def create(self, validated_data):
+        return Tags.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.tags_name = validated_data.get('tags_name', instance.tags_name)
+        instance.user = validated_data.get('user', instance.user)
+        instance.save()
+        return instance
 
 
 #User Serializer ------------------------------------------------
