@@ -10,22 +10,21 @@ from rest_framework.response import Response
 
 from user_profile import serializers
 
-@csrf_exempt
-class ProfileViewSet (viewsets.ModelViewSet):
+
+class ProfileModelViewSet (viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     # permission_classes = [permissions.IsAuthenticated]
 
-class SiteViewSet (viewsets.ModelViewSet):
+class SiteModelViewSet (viewsets.ModelViewSet):
     queryset = Site.objects.all()
     serializer_class = SiteSerializer
     # permission_classes = [permissions.IsAuthenticated]
 
-class TagsViewSet (viewsets.ModelViewSet):
+class TagsModelViewSet (viewsets.ModelViewSet):
     queryset = Tags.objects.all()
-    serializer_class = TagsSerializer
-
-    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = TagsSerializer       
+    # permission_classes = [permissions.IsAuthenticated]
 
 class TagAPIView(ListAPIView):
     serializer_class = TagsSerializer
