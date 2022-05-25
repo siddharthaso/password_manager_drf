@@ -64,7 +64,9 @@ REST_FRAMEWORK = {
         # 'rest_framework.authentication.BasicAuthentication',
         # 'rest_framework.authentication.SessionAuthentication',
     ),
-    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 1
 }
 
 SIMPLE_JWT = {
@@ -103,10 +105,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'password_manager_DRF.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -117,10 +115,6 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
-
-# Password validation
-# https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -136,10 +130,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
-
-# Internationalization
-# https://docs.djangoproject.com/en/4.0/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
@@ -162,19 +152,3 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
-#{{{{{{{{{{ REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
-# Continuing to use CoreAPI
-# If you're currently using the CoreAPI schemas, you'll need to make sure to update your REST framework settings to include DEFAULT_SCHEMA_CLASS explicitly.
-
-# settings.py:
-
-# REST_FRAMEWORK = {
-#   ...
-#   'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
-# }
-# You'll still be able to keep using CoreAPI schemas, API docs, and client for the foreseeable future. We'll aim to ensure that the CoreAPI schema generator remains available as a 
-# third party package, even once it has eventually been removed from REST framework, scheduled for version 3.12.
-
-# We have removed the old documentation for the CoreAPI based schema generation. You may view the Legacy CoreAPI documentation here.}}}}}}}}}}
